@@ -1,34 +1,41 @@
-/* eslint-disable arrow-body-style */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/jsx-boolean-value */
 /* eslint-disable react/jsx-filename-extension */
-import React from 'react'
-// import { DatePicker, Space } from 'antd'
+import React, { useState } from 'react'
 import 'antd/dist/antd.css'
 import moment from 'moment'
-import DatePicker from 'react-multi-date-picker'
-import './MultiDatePicker.style.css'
+import '../styles/MultiDatePicker.css'
+import { DatePicker, Space } from 'antd'
 
 const { RangePicker } = DatePicker
 
-const onChange = (dates, dateStrings) => {
-  console.log('From: ', dates[0], ', to: ', dates[1])
-  console.log('From: ', dateStrings[0], ', to: ', dateStrings[1])
-}
+const PickDates = ({ setDates }) => {
+  const onChangeDate = async (_, dateStrings) => {
+    // console.log('From: ', dates[0], ', to: ', dates[1])
+    const startDate = dateStrings[0]
+    const endDate = dateStrings[1]
+    const newDate = { startDate, endDate }
+    // setDates(newDate)
+    setDates(newDate)
+  }
 
-const PickDates = () => {
   return (
     <>
       <h2>Choose potential dates</h2>
-      <DatePicker />
-
-      {/* <Space direction="vertical" size={12}>
+      {/* <DatePicker
+        multiple={true}
+        onChange={handleChange}
+        format="YYYY-MM-DD"
+      /> */}
+      <Space direction="vertical" size={12}>
         <RangePicker
           ranges={{
             Today: [moment(), moment()],
             'This Month': [moment().startOf('month'), moment().endOf('month')],
           }}
-          onChange={onChange}
+          onChange={onChangeDate}
         />
-      </Space> */}
+      </Space>
     </>
   )
 }

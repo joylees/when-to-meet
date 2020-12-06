@@ -17,7 +17,7 @@ const App = () => {
         <Route exact path="/">
           <NewEvent />
         </Route>
-        <Route exact path="/addAvailabilities">
+        <Route path="/addAvailabilities/:meetingId">
           <AddAvailabilities />
         </Route>
       </Switch>

@@ -19,6 +19,7 @@
     "eslint-plugin-react-hooks": "^4 || ^3 || ^2.3.0 || ^1.7.0"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.3.0",
     "antd": "^4.8.6",
     "axios": "^0.21.0",
     "babel-eslint": "^10.1.0",

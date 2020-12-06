@@ -16,14 +16,28 @@ router.get('/meetings', (req, res, next) => {
 })
 
 router.post('/meetings/create', async (req, res, next) => {
+  console.log(req.body)
+  console.log('HI in backend')
   const { dates } = req.body
   const { username } = req.session
   try {
-    await Meeting.create({ creator: username, dates })
-    res.send('New meeting created')
+    const meeting = await Meeting.create({ creator: username, dates })
+    res.send(meeting)
   } catch (err) {
+    console.log(err)
     next(err)
   }
+})
+
+router.get('/meetings/get', async (req, res, next) => {
+  const { meetingId } = req.body
+  Meeting.find({ meetingId }, (err, meeting) => {
+    if (!err) {
+      res.json(meeting)
+    } else {
+      next(err)
+    }
+  })
 })
 
 router.post('/meetings/availability/add', async (req, res, next) => {
