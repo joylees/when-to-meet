@@ -71,7 +71,7 @@ const ViewMeetings = () => {
         <Col>
           {meetings.map(meeting => (
             <Card style={{ marginTop: '10px' }} key={meeting._id} title={meeting.name} bordered={true}>
-              <h4>Meeting ID: {meeting._id} </h4>
+              <h6>Meeting ID: {meeting._id} </h6>
               <Link to={`showAvailabilities/${meeting._id}`}>Show Availiabilities</Link>
             </Card>
           ))}

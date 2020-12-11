@@ -57,7 +57,8 @@ const NewEvent = () => {
   }
 
   const handleLogout = () => {
-    Axios.post('/account/logout').then(res => history.push('/'))
+    console.log('log out')
+    Axios.post('/account/logout').then(res => history.push('/login'))
   }
 
   return (
