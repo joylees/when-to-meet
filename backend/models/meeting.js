@@ -5,6 +5,7 @@ const meetingSchema = new Schema({
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
   },
+  meetingName: String,
   creator: String,
 })
 

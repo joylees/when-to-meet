@@ -9,6 +9,7 @@ import {
 import AddAvailabilities from './AddAvailabilities'
 import NewEvent from './NewEvent'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import ShowAvailabilities from './ShowAvailabilities'
 
 const App = () => {
   return (
@@ -19,6 +20,9 @@ const App = () => {
         </Route>
         <Route path="/addAvailabilities/:meetingId">
           <AddAvailabilities />
+        </Route>
+        <Route path="/showAvailabilities/:meetingId">
+          <ShowAvailabilities />
         </Route>
       </Switch>
     </BrowserRouter>

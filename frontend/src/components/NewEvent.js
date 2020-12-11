@@ -22,9 +22,12 @@ const NewEvent = () => {
     const endDate = new Date(dates.endDate)
     endDate.setHours(endTime)
 
+   
     const dateBody = { dates: { startDate, endDate } }
+    console.log({dateBody})
     const response = await Axios.post('api/meetings/create', dateBody)
     if (response.status === 200) {
+      console.log({response})
       const { _id: id } = response.data
       history.push(`/addAvailabilities/${id}`)
     } else {

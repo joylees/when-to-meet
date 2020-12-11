@@ -16,8 +16,6 @@ router.get('/meetings', (req, res, next) => {
 })
 
 router.post('/meetings/create', async (req, res, next) => {
-  console.log(req.body)
-  console.log('HI in backend')
   const { dates } = req.body
   const { username } = req.session
   try {
@@ -29,11 +27,11 @@ router.post('/meetings/create', async (req, res, next) => {
   }
 })
 
-router.get('/meetings/get', async (req, res, next) => {
-  const { meetingId } = req.body
-  Meeting.find({ meetingId }, (err, meeting) => {
+router.get('/meetings/:id', async (req, res, next) => {
+  const { id } = req.params
+  Meeting.find({ _id: id }, (err, meeting) => {
     if (!err) {
-      res.json(meeting)
+      res.send(meeting)
     } else {
       next(err)
     }
@@ -41,8 +39,9 @@ router.get('/meetings/get', async (req, res, next) => {
 })
 
 router.post('/meetings/availability/add', async (req, res, next) => {
+  console.log(req.body)
   try {
-    await Availability.create({ ...req.body })
+    await Availability.create(req.body)
     res.send('New availability added')
   } catch (err) {
     next(err)
@@ -59,8 +58,9 @@ router.post('/meetings/availability/update', async (req, res, next) => {
   }
 })
 
-router.get('/meetings/availabilities', async (req, res, next) => {
-  Availability.find({}, (err, availabilities) => {
+router.get('/meetings/availabilities/:id', async (req, res, next) => {
+  const { id } = req.params
+  Availability.find({ meetingId: id }, (err, availabilities) => {
     if (!err) {
       res.json(availabilities)
     } else {

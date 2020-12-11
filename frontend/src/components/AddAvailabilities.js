@@ -1,11 +1,13 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ScheduleSelector from 'react-schedule-selector'
 import { useHistory, useParams } from 'react-router'
 import { Container, Row, Col } from 'react-bootstrap'
 import { CopyOutlined, ArrowRightOutlined } from '@ant-design/icons'
 import { Form, Input, Button } from 'antd'
+import Axios from 'axios'
+import { endOfHour } from 'date-fns'
 
 //need to get dates and times from database and set to schedule
 //copy link to clipboard
@@ -13,15 +15,58 @@ import { Form, Input, Button } from 'antd'
 //view availability (& respondents & colors)
 
 const AddAvailabilities = () => {
+  const history = useHistory()
   const [schedule, setSchedule] = useState([])
   const { meetingId } = useParams()
-  const [name, setName] = ('')
+  const [name, setName] = useState('')
+  const [numDays, setNumDays] = useState(2)
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
 
   const handleChange = newSchedule => {
     console.log('meetingId', meetingId)
     setSchedule(newSchedule)
     console.log(newSchedule)
   }
+
+  const  saveAvailabilities = async () => {
+    if (name == '') {
+      alert('Make sure to fill out your name first!')
+    } else {
+      const data = { availableTimes: schedule, meetingId, user: name}
+      const response = await Axios.post('/api/meetings/availability/add', data)
+      if (response.status === 200) {
+        console.log({response})
+        history.push(`/showAvailabilities/${meetingId}`)
+      } else {
+        alert('Could not create meeting')
+      }
+    }
+  }
+
+  useEffect(() => {
+    const getMeetingDates = async () => {
+      try {
+        const response = await Axios.get(`/api/meetings/${meetingId}`)
+        const start = new Date(response.data[0].dates.startDate)
+        const end = new Date(response.data[0].dates.endDate)
+
+        setStartDate(start)
+        setEndDate(end)
+
+        const diffTime = Math.abs(start - end)
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+        console.log(diffTime + " milliseconds")
+        console.log(diffDays + " days")
+
+        setNumDays(diffDays)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getMeetingDates()
+  }, [])
+
 
   return (
     <Container>
@@ -33,7 +78,7 @@ const AddAvailabilities = () => {
           </Button>
         </Col>
         <Col lg={3}>
-          <Button type="solid" icon={<ArrowRightOutlined />}>
+          <Button onClick={saveAvailabilities} type="solid" icon={<ArrowRightOutlined />}>
             Submit and view other's availabilities
           </Button>
         </Col>
@@ -45,7 +90,7 @@ const AddAvailabilities = () => {
             // onValuesChange={onFormLayoutChange}
           >
             <Form.Item>
-              <Input placeholder="Your name" />
+              <Input onChange={(e)=>{setName(e.target.value)}} placeholder="Your name" />
             </Form.Item>
             <Form.Item>
               <Button type="primary">Submit</Button>
@@ -53,18 +98,22 @@ const AddAvailabilities = () => {
           </Form>
         </Col>
         <Col>
-          <ScheduleSelector
-            selection={schedule}
-            //need to get num of days from range
-            numDays={5}
-            //need to get min time and max time 
-            minTime={8}
-            maxTime={22}
-            hourlyChunks={2}
-            dateFormat="ddd M/D"
-            timeFormat="HH:mm"
-            onChange={handleChange}
-          />
+          {
+            (startDate && endDate && numDays) ?
+<ScheduleSelector
+              selection={schedule}
+              startDate={startDate}
+              numDays={numDays}
+              minTime={startDate.getHours()}
+              maxTime={endDate.getHours()}
+              hourlyChunks={2}
+              dateFormat="ddd M/D"
+              timeFormat="HH:mm"
+              onChange={handleChange}
+              />
+            : 
+            null
+          }    
         </Col>
       </Row>
     </Container>
