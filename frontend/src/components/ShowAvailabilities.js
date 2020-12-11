@@ -14,13 +14,13 @@ const ShowAvailabilities = () => {
   const [numDays, setNumDays] = useState(2)
   const [startDate, setStartDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
-  const [bestTime, setBestTime] = useState(null)
+  const [best, setBest] = useState(null)
   const [countDatetime, setcountDatetime] = useState(null)
-  const [meeting, setMeetingName] = useState('')
+  const [meetingName, setMeetingName] = useState('')
 
   var gapi = window.gapi
-  var CLIENT_ID = ""
-  var API_KEY = ""
+  var CLIENT_ID = "385310888978-9gi1j5stm9ecrkb5aca03k0rhgcm9lik.apps.googleusercontent.com"
+  var API_KEY = "AIzaSyCz9M7gEmJCcKqDiYBGHVhFAUByPeWYnrY"
   var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
   var SCOPES = "https://www.googleapis.com/auth/calendar.events"
 
@@ -37,17 +37,19 @@ const ShowAvailabilities = () => {
 
       gapi.client.load('calendar', 'v3', () => console.log('bam!'))
 
+      const startDateTime = new Date(best)
+      const endDateTime = new Date(startDateTime.getTime() + 30 * 60 * 1000).toISOString();
       gapi.auth2.getAuthInstance().signIn()
       .then(() => {
         var event = {
-          'summary': 'Awesome Event!',
+          'summary': "meeting name",
           'start': {
-            'dateTime': '2020-06-28T09:00:00-07:00',
-            'timeZone': 'America/Los_Angeles'
+            'dateTime': startDateTime,
+            // 'timeZone': 'America/Los_Angeles'
           },
           'end': {
-            'dateTime': '2020-06-28T17:00:00-07:00',
-            'timeZone': 'America/Los_Angeles'
+            'dateTime': endDateTime,
+            // 'timeZone': 'America/Los_Angeles'
           },
         }
 
@@ -124,10 +126,11 @@ const ShowAvailabilities = () => {
         count.forEach(element => {
           element.percentage=element.count*100/isMax
         });
-        // console.log(count.sort((a,b)=>a.count<b.count)[0])
         setcountDatetime(count);
-        setBestTime(count.sort((a,b)=>a.count<b.count)[0])
-        console.log({bestTime})
+        const t = count.sort((a,b)=>a.count<b.count)[0]
+        console.log('best', t)
+        setBest(t.datetime)
+        console.log('Printing later',best)
         setSchedule(allAvailableTimes)
         console.log(allAvailableTimes)
         const { availabletimes } = response
@@ -193,7 +196,6 @@ const renderTooltip = (props) => (
       }
     }
       
-    // countDatetime.filter(x=>x)
     return <div style={{background:'#fae0e4',height:20}}>
 
     </div>
@@ -227,8 +229,10 @@ const renderTooltip = (props) => (
           <Col>
             <h6>Hover over each cell to find out which group member is free</h6>
             <h2>One of the best times for your group to meet is</h2>
-            {/* <h1>{bestTime}</h1> */}
-            <Button>Add event to your Google Calendar</Button>
+            {
+              best ? <h4>{best.toString()}</h4> : null
+            }
+            <Button onClick={addToCalendar}>Add event to your Google Calendar</Button>
           </Col>
         </Row>
       </Container>

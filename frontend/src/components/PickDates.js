@@ -22,12 +22,7 @@ const PickDates = ({ setDates }) => {
   return (
     <>
       <h2>Choose potential dates</h2>
-      {/* <DatePicker
-        multiple={true}
-        onChange={handleChange}
-        format="YYYY-MM-DD"
-      /> */}
-      <Space direction="vertical" size={12}>
+      <Space className="mt-3" direction="vertical" size={12}>
         <RangePicker
           ranges={{
             Today: [moment(), moment()],

@@ -21,12 +21,16 @@ const PickTimes = ({ setStartTime, setEndTime }) => {
 
   return (
     <>
-      <h2>Choose potential times</h2>
-      <div>
-        <h4>Start Time</h4>
-        <TimePicker defaultValue={moment('00:00', format)} format={format} onChange={addStartTime} />
-        <h4>End Time</h4>
-        <TimePicker defaultValue={moment('00:00', format)} format={format} onChange={addEndTime} />
+      <h3>Choose potential times</h3>
+      <div className="d-flex mt-3">
+        <div className="mr-3">
+          <h6>Start Time</h6>
+          <TimePicker defaultValue={moment('00:00', format)} format={format} onChange={addStartTime} />
+        </div>
+        <div>
+          <h6>End Time</h6>
+          <TimePicker defaultValue={moment('00:00', format)} format={format} onChange={addEndTime} />
+        </div>
       </div>
     </>
   )

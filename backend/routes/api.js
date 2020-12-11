@@ -38,6 +38,17 @@ router.get('/meetings/:id', async (req, res, next) => {
   })
 })
 
+router.post('/meetings/creator', async (req, res, next) => {
+  const { username } = req.session
+  Meeting.find({ creator: username }, (err, meetings) => {
+    if (!err) {
+      res.json(meetings)
+    } else {
+      next(err)
+    }
+  })
+})
+
 router.post('/meetings/availability/add', async (req, res, next) => {
   console.log(req.body)
   try {
@@ -69,18 +80,4 @@ router.get('/meetings/availabilities/:id', async (req, res, next) => {
   })
 })
 
-router.get('/meetings/bestTime', async (req, res, next) => {
-  const { meetingId } = req.body
-  Availability.find({ meetingId }, (err, availabilities) => {
-    if (!err) {
-      res.json(availabilities)
-    } else {
-      next(err)
-    }
-  })
-})
-
 module.exports = router
-
-// get optimal meeting time
-// how to generate URL and get meeting ID from URL
