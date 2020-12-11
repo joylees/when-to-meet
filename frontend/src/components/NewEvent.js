@@ -93,7 +93,7 @@ const NewEvent = () => {
             <h1>3</h1>
             <h3>Name and create your event!</h3>
             <Input className="mt-3" onChange={e => { setMeetingName(e.target.value) }} placeholder="Event name" />
-            <Button className="mt-2" onClick={createEvent}>Create Event</Button>
+            <Button className="mt-1" onClick={createEvent}>Create Event</Button>
           </div>
         </Col>
       </Row>
